@@ -4,5 +4,21 @@
 2.오버라이딩
 파생 클래스에서 기본 클래스의 가상 함수를 재작성하여 기본클래스의 함수를 무시하고 오버라이딩한 함수를 사용하는것.
 기본 클래스 포인터를 사용하거나 파생 클래스 포인터를 사용해서 함수를 호출하면 파생 클래스의 오버라이딩된 함수가 실행된다.
-3.
- 
+3.가상 함수
+Virtual 키워드로 선언된 멤버함수로 컴파일러에게 자신의 호출 바인딩을 실행시간으로 미루도록 지시하는 키워드.
+오버라이딩과 가상함수 사용방법
+class Base {                                     class Base {
+public:                                          public:
+void f() {                                       virtual void f() {
+cout << "Base::f() called" << endl;              cout << "Base::f() called" << endl;
+}                                                }
+};                                               };
+class Derived : public Base {                    class Derived : public Base {
+public:                                          public:
+void f() {                                       virtual void f() {
+cout << "Derived::f() called" << endl;           cout << "Derived::f() called" << endl;
+}                                                }  
+};                                               };
+좌측은 함수 재정의, 우측은 오버라이딩 된 상태에서 
+좌측 객체에는 동등한 호출 기회를 가진 Base멤버 f()와 Derived멤버 f()가 존재하고
+우측 객체에는 Base멤버 f()와 Derived멤버 f()가 존재하지만 Base멤버 f()가 존재감을잃고 Derived f()만 호출된다
