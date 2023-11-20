@@ -1,0 +1,134 @@
+-----------------------------------------<GrapicEditor.h파일>-----------------------------------------
+public:
+    Circle(int index);
+    void show();
+};
+class Rect : public GraphicEditor {
+public:
+    Rect(int index);
+    void show();
+};
+#endif 
+
+-----------------------------------------<GrapicEditor.Cpp파일>-----------------------------------------
+#include "GraphicEditor.h"
+#include <iostream>
+
+GraphicEditor::GraphicEditor(int i) : index(i) {}
+
+int GraphicEditor::getIndex() {
+    return index;
+}
+
+void GraphicEditor::subIndex() {
+    --index;
+}
+Line::Line(int index) : GraphicEditor(index) {}
+
+void Line::show() {
+    std::cout << getIndex() << ": Line" << std::endl;
+}
+Circle::Circle(int index) : GraphicEditor(index) {}
+
+void Circle::show() {
+    std::cout << getIndex() << ": Circle" << std::endl;
+}
+Rect::Rect(int index) : GraphicEditor(index) {}
+
+void Rect::show() {
+    std::cout << getIndex() << ": Rectangle" << std::endl;
+}
+
+-----------------------------------------<UI.h파일>-----------------------------------------
+#ifndef UI_H
+#define UI_H
+
+class UI {
+    static int n;
+
+public:
+    static void start();
+    static int menu();
+    static int insert();
+    static int del();
+};
+#endif
+
+-----------------------------------------<UI.Cpp파일>-----------------------------------------
+#include "UI.h"
+#include "GraphicEditor.h"
+#include <iostream>
+
+int UI::n = 0;
+
+void UI::start() {
+    std::cout << "그래픽 에디터입니다." << std::endl;
+}
+int UI::menu() {
+    std::cout << "삽입:1, 삭제:2, 모두보기:3, 종료:4 >> ";
+    std::cin >> n;
+    return n;
+}
+int UI::insert() {
+    std::cout << "선:1, 원:2, 사각형:3 >> ";
+    std::cin >> n;
+    return n;
+}
+int UI::del() {
+    std::cout << "삭제하고자 하는 도형의 인덱스 >> ";
+    std::cin >> n;
+    return n;
+}
+
+-----------------------------------------<main.h파일>-----------------------------------------
+#include "UI.h"
+#include "GraphicEditor.h"
+#include <iostream>
+
+int main() {
+    GraphicEditor* g[100];
+    UI::start();
+    int index = 0;
+
+    for (;;) {
+        int m = UI::menu();
+
+        if (m == 1) {
+            int n = UI::insert();
+            if (n == 1) {
+                Line* l = new Line(index);
+                g[index] = l;
+                ++index;
+            }
+            else if (n == 2) {
+                Circle* c = new Circle(index);
+                g[index] = c;
+                ++index;
+            }
+            else if (n == 3) {
+                Rect* r = new Rect(index);
+                g[index] = r;
+                ++index;
+            }
+            else
+                std::cout << "오류" << std::endl;
+        }
+        else if (m == 2) {
+            int n = UI::del();
+            for (int i = n; i < index - 1; ++i) {
+                g[i] = g[i + 1];
+                g[i]->subIndex();
+            }
+            --index;
+        }
+        else if (m == 3) {
+            for (int i = 0; i < index; ++i)
+                g[i]->show();
+        }
+        else if (m == 4)
+            break;
+        else
+            std::cout << "오류" << std::endl;
+    }
+    return 0;
+}
